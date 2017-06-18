@@ -1,0 +1,33 @@
+extends layout
+
+block content
+	body
+		.container-fluid
+			.row
+				#master-place.col-md-12 
+					.row
+						h5#msghead
+						form#new-evnt.col-md-6.offset-md-3
+							h4.msg=status
+							.form-group
+								label(for='postalCode') Индекс отделения
+								input#postalCode.form-control(type='text', placeholder='индекс')
+							.form-group
+								label(for='title') Название
+								input#title.form-control(type='text', placeholder='название')
+							.form-group
+								label(for='description') Описание
+								input#description.form-control(type='text', placeholder='описание')
+							.form-group
+								label(for='start') Дата и время начала
+								input#start.form-control(type='text', placeholder='начало')
+							.form-group
+								label(for='end') Дата и время окончания
+								input#end.form-control(type='text', placeholder='окончание')
+							a#create-evnt-btn.btn.btn-success(href='#') Сохранить заявку
+		// Modal
+		.modal-place
+		script(src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous")
+		script(type='text/javascript', src='../js/evntform.js')

@@ -1,0 +1,64 @@
+extends layout
+
+block content
+	body
+		.container-fluid
+			.row
+				#master-place.col-md-12
+					.row						
+						form#new-evnt.col-md-6.offset-md-3(style="display:none")
+							h5#msghead(style="display:none; color: green;") Заявка успешно сохранена
+							h4.msg=status
+							.form-group
+								label(for='postalCode') Индекс отделения
+								input#postalCode.form-control(type='text', placeholder='индекс')
+							.form-group
+								label(for='title') Название
+								input#title.form-control(type='text', placeholder='название')
+							.form-group
+								label(for='description') Описание
+								input#description.form-control(type='text', placeholder='описание')
+							.form-group
+								label(for='start') Дата и время начала
+								input#start.form-control(type='text', placeholder='начало')
+							.form-group
+								label(for='end') Дата и время окончания
+								input#end.form-control(type='text', placeholder='окончание')
+							a#create-evnt-btn.btn.btn-success(href='#') Сохранить заявку 
+					.row
+						form#new-user.col-md-6.offset-md-3(style="display:none")
+							h4.msg=status
+							.form-group
+								label(for='loginInputC') Login
+								input#loginInputC.form-control(type='ext', placeholder='login')
+							.form-group
+								label(for='emailInputC') Email address
+								input#emailInputC.form-control(type='email', placeholder='Enter email')
+							.form-group
+								label(for='passInputC') Password
+								input#passInputC.form-control(type='password', placeholder='Password')
+							.form-group
+								label(for='roleInputC') Role
+								input#roleInputC.form-control(type='text', placeholder='role')
+							.form-group
+								label(for='fioInputC') ФИО
+								input#fioInputC.form-control(type='text', placeholder='fio')
+							a#create-user-btn.btn.btn-success(href='#') Создать пользователя
+							a#login-switch.btn.btn-default(href='#') L0gin		
+						form#login-user.col-md-6.offset-md-3
+							h4.msg=status
+							.form-group
+								label(for='loginInput') Login
+								input#loginInput.form-control(type='ext', placeholder='login')							
+							.form-group
+								label(for='passInput') Password
+								input#passInput.form-control(type='password', placeholder='Password')							
+							a#login-btn.btn.btn-success(href='#') Войти
+							a#create-user-switch.btn.btn-default(href='#') Создать пользователя	
+		// Modal
+		.modal-place
+		script(src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous")
+		script(type='text/javascript', src='../js/socket.io.js')
+		script(type='text/javascript', src='../js/login.js')
