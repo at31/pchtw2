@@ -97,15 +97,15 @@ console.log('hi pcht, do login');
 	        var evnt = {
 						title: $('#title').val(),
 						description: $('#description').val(),
-						start: $('#start').val(),
-						end: $('#end').val(),
+						start: moment($('#start').val(),'DD MM YYYY HH mm').toDate(),
+						end: moment($('#end').val(),'DD MM YYYY HH mm').toDate(),
 						postalCode:$('#postalCode').val()
 					};
-				//console.log(evnt);	
+				console.log('new pre evnt',evnt);	
 					
 					$.ajax({
 						type: 'POST',
-						url: '/evnt/save',
+						url: '/pre-evnt/save',
 						headers: {
     "content-type": "application/x-www-form-urlencoded",
     "authorization": "JWT "+_token

@@ -29,7 +29,7 @@ router.post('/', function (req, res, next) {
                 if(user.pass===hash(req.body.pass)) {
                     //req.session.user = {id: user._id, name: user.name, role:user.role};
                     var payload = {id: user._id};
-                    var token = jwt.sign(payload, 'tasmanianDevil', {expiresIn:60});                    
+                    var token = jwt.sign(payload, 'tasmanianDevil', {expiresIn:6000});                    
                     res.json({
                             'status':'login',
                         message: 'авторизация - успешно',

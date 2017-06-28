@@ -8,6 +8,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var routes = require('./routes/index');
 var evnt = require('./routes/evnt');
+var preevnt = require('./routes/preevnt');
 var login = require('./routes/login');
 var phase1 = require('./routes/phase1');
 var phase2 = require('./routes/phase2');
@@ -95,6 +96,7 @@ app.use(function (req,res,next) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/evnt', evnt);
+app.use('/pre-evnt', preevnt);
 app.use('/login', login);
 app.use('/phase1', phase1);
 app.use('/phase2', phase2);
