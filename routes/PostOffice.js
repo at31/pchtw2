@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient,
-	    assert = require('assert');
+	        assert = require('assert');
 var mongodb = require('mongodb');
 var crypto = require('crypto');
 var settings=require('./settings');
@@ -12,66 +12,72 @@ var url=settings.dbURL;
 /* GET all users*/
 router.get('/all', function (req, res, next) {
 
-	    MongoClient.connect(url, function (err, db) {
-		    var collection = db.collection('postoffices');
-			    collection.aggregate([							
-				    {
-				          $lookup:{from:'evnt',
+	        MongoClient.connect(url, function (err, db) {
+		        var collection = db.collection('postoffices');
+			        collection.aggregate([
+				        {
+				                  $lookup:{from:'evnt',
 							localField:'postalCode',
-							foreignField:'postalCode', 
+							foreignField:'postalCode',
 							as:'evnts'}
-				    }
+				        }
 				]).toArray().then(function (r) {
 
-				    db.close();							
-				    res.setHeader('Last-Modified', (new Date()).toUTCString());
-				    return res.json(r);
+				        db.close();
+				        res.setHeader('Last-Modified', (new Date()).toUTCString());
+				        return res.json(r);
 
 			});
 	});
 });
 
-router.get('/search', function (req, res, next) {
+router.post('/search', function (req, res, next) {
 
-	    MongoClient.connect(url, function (err, db) {
-		    var collection = db.collection('postoffices');
-			    collection.aggregate([							
-				    {
-				          $lookup:{from:'evnt',
+	        MongoClient.connect(url, function (err, db) {
+		        var collection = db.collection('postoffices');
+			        collection.aggregate([
+				        {
+				            $lookup:{from:'evnt',
 							localField:'postalCode',
-							foreignField:'postalCode', 
+							foreignField:'postalCode',
 							as:'evnts'}
-				    },				
-				    {
-					        $match:{
-						'evnts.title':"123"
-					}
-				    }
+				        },
+				        {
+					                $match: req.body.match // {'evnts.title':'123'}
+				        }
 				]).toArray().then(function (r) {
 
-				    db.close();							
-				    res.setHeader('Last-Modified', (new Date()).toUTCString());
-				    return res.json(r);
+				        db.close();
+				        res.setHeader('Last-Modified', (new Date()).toUTCString());
+				        return res.json(r);
 
 			});
 	});
 });
 router.post('/new',function (req,res) {
-	MongoClient.connect(url, function (err, db) {
+	    MongoClient.connect(url, function (err, db) {
     	assert.equal(null, err);
     	db.collection('postoffices').insertOne(req.body).then(function (po) {
-					            assert.equal(1, po.insertedCount);
-					            res.json({
-					            	'insert': 'ok',
-					            	'id': po.insertedId
-					            });
-		});
+					                    assert.equal(1, po.insertedCount);
+					                    res.json({
+					            	    'insert': 'ok',
+					            	    'id': po.insertedId });
+		    });
 	});
 });
-router.post('/update', function (req, res, next) {    
-    MongoClient.connect(url, function (err, db) {
+router.post('/update', function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {    	
         assert.equal(null, err);
-        db.collection('postoffices').updateOne({
+        let _po=Object.assign({},req.body);
+        delete _po.id;
+        console.log(req.body.comps[0].soft[0]);
+        db.collection('postoffices').findOneAndReplace({_id: new mongodb.ObjectID(req.body.id)}, _po)
+        .then(function(err, r){
+        	// assert.equal(null, err);
+        	db.close();
+        	return res.json({'update': 'ok'});
+        });
+      /*  db.collection('postoffices').findOneAndReplace({
             _id: new mongodb.ObjectID(req.body.id)
         }, {
             $set: {
@@ -96,22 +102,23 @@ router.post('/update', function (req, res, next) {
         'update': 'ok'
     });
 });
+        */
     });
 
 });
 
-router.post('/del', function(req, res, next) {
-	MongoClient.connect(url, function(err, db) {		
-		var collection = db.collection('postoffices');
-		collection.findOneAndDelete({_id: new mongodb.ObjectID(req.body._id)}).then(function(r) {
-			test.equal(1, r.lastErrorObject.n);
-        	test.equal(req.body._id, r.value._id);
-			return res.json({
-						"status":"ok",
-						"text": "Почтовое отделение удалено"
+router.post('/del', function (req, res, next) {
+	    MongoClient.connect(url, function (err, db) {
+		    var collection = db.collection('postoffices');
+		    collection.findOneAndDelete({_id: new mongodb.ObjectID(req.body._id)}).then(function (r) {
+			    test.equal(1, r.lastErrorObject.n);
+     test.equal(req.body._id, r.value._id);
+			    return res.json({
+						'status':'ok',
+						'text': 'Почтовое отделение удалено'
 					});
 
-			db.close();	
+			    db.close();
 		});
 	});
 });

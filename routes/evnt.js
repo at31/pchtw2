@@ -156,9 +156,11 @@ router.post('/save/multi', function (req, res, next) {
     var insertDoc = function (db, callback) {
 
         req.body.forEach(function (evnt) {
-            evnt.start = moment(req.body.start).toDate();
-            console.log(evnt.start);
-            evnt.end = moment(req.body.end).toDate();
+            evnt.start = moment(evnt.start).toDate();
+            evnt.end = moment(evnt.end).toDate();
+            if(evnt.endDate){
+                evnt.endDate = moment(evnt.endDate).toDate();
+            }
         });
 		// req.body.start = new Date(req.body.start);
 		// req.body.end = new Date(req.body.end);
@@ -185,7 +187,7 @@ router.post('/update/:id', function (req, res, next) {
     MongoClient.connect(url, function (err, db) {
         assert.equal(null, err);
         console.log('Connected successfully to server');
-        db.collection('test').updateOne({
+        db.collection('evnt').updateOne({
             _id: new mongodb.ObjectID(req.params.id)
 					// title:'111111'
         }, {
@@ -196,7 +198,9 @@ router.post('/update/:id', function (req, res, next) {
                 postalCode: req.body.postalCode,
                 status: req.body.status,
                 description: req.body.description,
-                executor: req.body.executor
+                executor: new mongodb.ObjectID(req.body.executor),
+                endDate: moment(req.body.endDate).toDate(),
+                endDesc: req.body.endDesc
             }
         },
 			function (err, r) {
@@ -221,7 +225,7 @@ router.delete('/del/:id', function (req, res, next) {
         assert.equal(null, err);
         console.log('Connected correctly to server');
 
-        db.collection('test').deleteOne({
+        db.collection('evnt').deleteOne({
             _id: new mongodb.ObjectID(req.params.id)
         }, function (err, r) {
             assert.equal(null, err);
