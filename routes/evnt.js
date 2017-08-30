@@ -71,7 +71,24 @@ router.get('/evnt/:indx', function (req, res, next) {
     };
 });
 
-
+/*POST search */
+router.post('/search',function(req, res, next){
+    console.log(req.body.search);
+    var docs=[];
+    MongoClient.connect(url, function(err, db){
+        assert.equal(null, err);
+        var collection= db.collection('evnt');
+        var cursor=collection.find(req.body.search);
+        cursor.forEach(function(doc){            
+            docs.push(doc);
+        },
+        function(err){
+            assert.equal(null, err);
+            db.close();
+            return res.json(docs);
+        });
+    });    
+});
 /* GET  map-reduce*/
 router.get('/mr', function (req, res, next) {
 

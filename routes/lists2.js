@@ -170,9 +170,10 @@ router.post('/update', function (req, res, next) {
 router.post('/del', function (req, res, next) {
 	    MongoClient.connect(url, function (err, db) {		
 		    var collection = db.collection('l2');
-		    collection.findOneAndDelete({_id: new mongodb.ObjectID(req.body._id)}).then(function (r) {
+		    collection.findOneAndDelete({_id: new mongodb.ObjectID(req.body._id)})
+		    .then(function (r) {
 			    test.equal(1, r.lastErrorObject.n);
-     test.equal(req.body._id, r.value._id);
+     			// test.equal(req.body._id, r.value._id);
 			    return res.json({
 						'status':'ok',
 						'text': "Список удален"
